@@ -113,6 +113,9 @@ However, if you want to take advantage of the live reload functionality you shou
 make webpack-dev-server
 ```
 
+> *NOTE:* You must run one of the previous commands at least once, otherwise the following error would be displayed:
+> OSError at / Error reading /src/webpack-development-stats.json. Are you sure webpack has generated the file and the path is correct?
+
 ### Accessing Administration
 
 The django admin site of the project can be accessed at `localhost:8000/admin`
