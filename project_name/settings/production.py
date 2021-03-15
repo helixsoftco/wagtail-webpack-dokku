@@ -5,7 +5,7 @@ DEBUG = False
 
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
-ALLOWED_HOSTS = ['.project_name.com']
+ALLOWED_HOSTS = ['.project_name.com', '.altix.co', '.helixsoft.com.co']
 SECRET_KEY = get_secret('DJANGO_SECRET_KEY')
 
 if get_secret('DATABASE_URL'):
