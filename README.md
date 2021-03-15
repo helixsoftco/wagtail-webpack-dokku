@@ -59,7 +59,7 @@ git merge origin/webpack
 git merge origin/push-notifications
 ```
 
-Rename your project files and directorys:
+Rename your project files and directories:
 ```
 make name=project_name init
 ```
@@ -67,7 +67,7 @@ make name=project_name init
 
 > After this command you can already delete the init command inside the `Makefile` 
 
-The command before will remove the `.git` folder so you will have to initialize it again:
+The command before will remove the `.git` folder, so you will have to initialize it again:
 ```
 git init
 git remote add origin <repository-url>
@@ -91,7 +91,7 @@ To recreate the docker images after dependencies changes run:
 docker-compose up --build
 ```
 
-To remove the docker containers including database (Useful sometimes when dealing with migrations):
+To remove the docker containers including the database (Useful sometimes when dealing with migrations):
 
 ```
 docker-compose down
@@ -101,7 +101,7 @@ docker-compose down
 
 The django admin site of the project can be accessed at `localhost:8000/admin`
 
-By default the development configuration creates a superuser with the following credentials:
+By default, the development configuration creates a superuser with the following credentials:
 
 ```
 Username: admin
@@ -110,13 +110,13 @@ Password: admin
 
 ## Production Deployment: ##
 
-The project is dokku ready, this are the steps to deploy it in your dokku server:
+The project is dokku ready, these are the steps to deploy it in your dokku server:
 
 #### Server Side: ####
 
-> This docs does not cover dokku setup, you should already have configured the initial dokku config including ssh keys
+> These docs do not cover dokku setup, you should already have configured the initial dokku config including ssh keys
 
-Create app and configure postgres:
+Create the app and configure postgres:
 ```
 dokku apps:create project_name
 dokku postgres:create project_name
