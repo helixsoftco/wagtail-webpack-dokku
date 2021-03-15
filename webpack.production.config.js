@@ -11,6 +11,6 @@ config.plugins.push(
   }),
 );
 
-config.output.path = path.resolve('./main/static/dist/');
+config.output.path = path.resolve('./project_name/static/dist/');
 
 module.exports = config;
