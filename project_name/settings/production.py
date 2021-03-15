@@ -1,7 +1,7 @@
 from .common import *
 from .partials.util import get_secret
 
-DEBUG = False
+DEBUG = True
 
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
