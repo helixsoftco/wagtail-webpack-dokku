@@ -19,6 +19,9 @@ webpack-build:
 superuser:
 	docker exec -it project_name ./manage.py createsuperuser
 
+bash:
+	docker exec -it project_name bash
+
 shell:
 	docker exec -it project_name ./manage.py shell
 
