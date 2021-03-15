@@ -48,7 +48,7 @@ Wagtail 2.12 + Django 3.1 + Webpack + Postgres 11 + Dokku config (Production Rea
 
 Clone the repository, and update your origin url: 
 ```
-git clone https://github.com/altixco/django-postgres-dokku project_name
+git clone https://github.com/helixsoftco/wagtail-webpack-dokku project_name
 cd project_name
 ```
 
