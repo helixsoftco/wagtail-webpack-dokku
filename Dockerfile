@@ -13,10 +13,8 @@ RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-r
     libjpeg62-turbo-dev \
     zlib1g-dev \
     libwebp-dev \
+    gettext \
  && rm -rf /var/lib/apt/lists/*
-
-# For localizations
-RUN apt-get install gettext -y
 
 # For webpack (to generate bundles)
 RUN apt-get install nodejs -y
