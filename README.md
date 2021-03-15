@@ -172,7 +172,7 @@ Push your changes and just wait for the magic to happens :D:
 git push production master
 ```
 
-> *IMPORTANT:* After deploying configure the correct site domain on: https://<host>/admin/sites/
+> *IMPORTANT:* After deploying configure the correct site domain on: https://myhost.com/admin/sites/
 > Otherwise some URLs would be blocked by the ALLOWED_HOSTS due to Wagtail requesting localhost
 
 Optional: To add SSL to the app check:
