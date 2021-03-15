@@ -24,7 +24,14 @@ body {
     background-size: cover;
     background-position: center;
     color: white;
-    text-shadow: 2px 2px 8px black;
+
+    h2, h3 {
+      text-shadow: 2px 2px 8px black;
+    }
+
+    .btn {
+      width: 160px;
+    }
 
     &:before {
       content: "";
