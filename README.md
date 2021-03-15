@@ -1,6 +1,6 @@
 # project_name
 
-Django 3.1.1 + Postgres 11 + Dokku config (Production Ready)
+Wagtail 2.12 + Django 3.1 + Webpack + Postgres 11 + Dokku config (Production Ready)
 
 ## Documentation ##
 
