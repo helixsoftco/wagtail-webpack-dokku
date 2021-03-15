@@ -181,3 +181,61 @@ Optional: Additional nginx configuration (like client_max_body_size) should be p
 ```
 
 > Further dokku configuration can be found here: http://dokku.viewdocs.io/dokku/
+
+### Serving static and media files from the dokku server
+
+In case you want to serve the `static` and `media` files directly from the server, instead of AWS or a different storage,
+the following steps are required:
+
+In the server configure the dokku persistent storage:
+
+```
+dokku storage:mount project_name /var/lib/dokku/data/storage/project_name/media:/src/media
+dokku storage:mount project_name /var/lib/dokku/data/storage/project_name/static:/src/static
+dokku ps:restart project_name
+```
+> See: https://github.com/dokku/dokku/blob/master/docs/advanced-usage/persistent-storage.md
+
+Then add the following config:
+```
+location /media/ {
+  alias /var/lib/dokku/data/storage/project_name/media/;
+}
+location /static/ {
+  alias /var/lib/dokku/data/storage/project_name/static/;
+}
+```
+
+To the following file (You may need to create it):
+```
+/home/dokku/project_name/nginx.conf.d/project_name.conf
+```
+
+Finally, restart Nginx:
+```
+service nginx restart
+```
+
+### Configuring CORS
+
+In production, you may want to configure Nginx to allow requests from a different domain, in that case add:
+
+```
+add_header "Access-Control-Allow-Origin" * always;
+add_header "Access-Control-Allow-Methods" "GET, POST, PUT, OPTIONS, HEAD, PATCH, DELETE" always;
+add_header "Access-Control-Allow-Headers" "Authorization, Origin, X-Requested-With, Content-Type, Accept" always;
+
+if ($request_method = OPTIONS) {
+  return 204;
+}
+```
+
+To the following file:
+```
+/home/dokku/project_name/nginx.conf.d/project_name.conf
+```
+
+Then restart Nginx:
+```
+service nginx restart
+```
