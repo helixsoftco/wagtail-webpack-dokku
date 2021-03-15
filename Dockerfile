@@ -12,8 +12,6 @@ RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-r
     libwebp-dev \
  && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update
-
 # For localizations
 RUN apt-get install gettext -y
 
