@@ -1,5 +1,6 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const path = require('path');
 
 module.exports = {
   context: __dirname,
@@ -21,6 +22,13 @@ module.exports = {
       chunks: 'all',
       name: 'modules',
     },
+  },
+  
+  resolve: {
+    extensions: ['.js', '.vue', '.scss'],
+    alias: {
+      '@': path.resolve('assets'),
+    }
   },
 
   plugins: [
