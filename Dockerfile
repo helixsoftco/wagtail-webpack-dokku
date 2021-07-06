@@ -1,9 +1,17 @@
-FROM python:3.7
+# Use an official Python runtime based on Debian 10 "buster" as a parent image.
+FROM python:3.8.1-slim-buster
+ENV PYTHONUNBUFFERED=1
 
-RUN apt-get update
-
-# For localizations
-RUN apt-get install gettext -y
+# Install system packages required by Wagtail and Django.
+RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    libmariadbclient-dev \
+    libjpeg62-turbo-dev \
+    zlib1g-dev \
+    libwebp-dev \
+    gettext \
+ && rm -rf /var/lib/apt/lists/*
 
 # Setup workdir
 RUN mkdir /src

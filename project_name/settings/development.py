@@ -8,6 +8,8 @@ SECRET_KEY = 'p3gm=o9o+_r(5*o$$kn#h*8#n1r)aquf^^nm_v5u0pn^qa$=4*'
 DEBUG = True
 ALLOWED_HOSTS = ['*']
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 # CORS Config: install django-cors-headers and uncomment the following to allow CORS from any origin
 """
 DEV_APPS = [
@@ -44,3 +46,9 @@ else:
             'PORT': 5432,
         }
     }
+
+# Local settings
+try:
+    from .local import *
+except ImportError:
+    pass

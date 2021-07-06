@@ -1,7 +1,6 @@
 # general imports
 from django.urls import path
 from django.urls import include
-from main.views import home
 
 # api imports
 from rest_framework import routers
@@ -18,6 +17,4 @@ apiurls = ([
 ], 'main')
 
 # general urls
-urlpatterns = [
-    path('', home, name="home"),
-]
+urlpatterns = []

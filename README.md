@@ -1,6 +1,6 @@
 # project_name
 
-Django 3.1.1 + Postgres 11 + Dokku config (Production Ready)
+Wagtail 2.12 + Django 3.1 + Webpack + Postgres 11 + Dokku config (Production Ready)
 
 ## Documentation ##
 
@@ -48,7 +48,7 @@ Django 3.1.1 + Postgres 11 + Dokku config (Production Ready)
 
 Clone the repository, and update your origin url: 
 ```
-git clone https://github.com/altixco/django-postgres-dokku project_name
+git clone https://github.com/helixsoftco/wagtail-webpack-dokku project_name
 cd project_name
 ```
 
@@ -59,7 +59,7 @@ git merge origin/webpack
 git merge origin/push-notifications
 ```
 
-Rename your project files and directorys:
+Rename your project files and directories:
 ```
 make name=project_name init
 ```
@@ -67,7 +67,7 @@ make name=project_name init
 
 > After this command you can already delete the init command inside the `Makefile` 
 
-The command before will remove the `.git` folder so you will have to initialize it again:
+The command before will remove the `.git` folder, so you will have to initialize it again:
 ```
 git init
 git remote add origin <repository-url>
@@ -91,7 +91,7 @@ To recreate the docker images after dependencies changes run:
 docker-compose up --build
 ```
 
-To remove the docker containers including database (Useful sometimes when dealing with migrations):
+To remove the docker containers including the database (Useful sometimes when dealing with migrations):
 
 ```
 docker-compose down
@@ -101,7 +101,7 @@ docker-compose down
 
 The django admin site of the project can be accessed at `localhost:8000/admin`
 
-By default the development configuration creates a superuser with the following credentials:
+By default, the development configuration creates a superuser with the following credentials:
 
 ```
 Username: admin
@@ -110,13 +110,13 @@ Password: admin
 
 ## Production Deployment: ##
 
-The project is dokku ready, this are the steps to deploy it in your dokku server:
+The project is dokku ready, these are the steps to deploy it in your dokku server:
 
 #### Server Side: ####
 
-> This docs does not cover dokku setup, you should already have configured the initial dokku config including ssh keys
+> These docs do not cover dokku setup, you should already have configured the initial dokku config including ssh keys
 
-Create app and configure postgres:
+Create the app and configure postgres:
 ```
 dokku apps:create project_name
 dokku postgres:create project_name
@@ -153,6 +153,9 @@ Push your changes and just wait for the magic to happens :D:
 git push production master
 ```
 
+> *IMPORTANT:* After deploying configure the correct site domain on: https://myhost.com/admin/sites/
+> Otherwise some URLs would be blocked by the ALLOWED_HOSTS due to Wagtail requesting localhost
+
 Optional: To add SSL to the app check:
 https://github.com/dokku/dokku-letsencrypt
 
@@ -162,3 +165,61 @@ Optional: Additional nginx configuration (like client_max_body_size) should be p
 ```
 
 > Further dokku configuration can be found here: http://dokku.viewdocs.io/dokku/
+
+### Serving static and media files from the dokku server
+
+In case you want to serve the `static` and `media` files directly from the server, instead of AWS or a different storage,
+the following steps are required:
+
+In the server configure the dokku persistent storage:
+
+```
+dokku storage:mount project_name /var/lib/dokku/data/storage/project_name/media:/src/media
+dokku storage:mount project_name /var/lib/dokku/data/storage/project_name/static:/src/static
+dokku ps:restart project_name
+```
+> See: https://github.com/dokku/dokku/blob/master/docs/advanced-usage/persistent-storage.md
+
+Then add the following config:
+```
+location /media/ {
+  alias /var/lib/dokku/data/storage/project_name/media/;
+}
+location /static/ {
+  alias /var/lib/dokku/data/storage/project_name/static/;
+}
+```
+
+To the following file (You may need to create it):
+```
+/home/dokku/project_name/nginx.conf.d/project_name.conf
+```
+
+Finally, restart Nginx:
+```
+service nginx restart
+```
+
+### Configuring CORS
+
+In production, you may want to configure Nginx to allow requests from a different domain, in that case add:
+
+```
+add_header "Access-Control-Allow-Origin" * always;
+add_header "Access-Control-Allow-Methods" "GET, POST, PUT, OPTIONS, HEAD, PATCH, DELETE" always;
+add_header "Access-Control-Allow-Headers" "Authorization, Origin, X-Requested-With, Content-Type, Accept" always;
+
+if ($request_method = OPTIONS) {
+  return 204;
+}
+```
+
+To the following file:
+```
+/home/dokku/project_name/nginx.conf.d/project_name.conf
+```
+
+Then restart Nginx:
+```
+service nginx restart
+```
