@@ -12,5 +12,21 @@
       "is_superuser": true,
       "is_active": true
     }
+  },
+  {
+    "model": "oauth2_provider.application",
+    "pk": 1000,
+    "fields": {
+      "client_id": "03Z1U46wujpGV6TeBN0a4wWsNuRLdOy5b9Oc3kHx",
+      "user": 1,
+      "redirect_uris": "",
+      "client_type": "public",
+      "authorization_grant_type": "password",
+      "client_secret": "ajgLsxKgT7sM5ETwa8CXKNAcxzO33uPHk5H5s4ke9SgP8GiMpmOVcGrhUCQywjWH9LwDpAILhAHZFbIceofjIPnBV4dngiEAtZfzchZQQFnUHAn5jPvcnzAvYVVEZTTR",
+      "name": "project_name",
+      "skip_authorization": false,
+      "created": "2019-05-21T17:21:20.731Z",
+      "updated": "2019-05-21T17:21:20.731Z"
+    }
   }
 ]
