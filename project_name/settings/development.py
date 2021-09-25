@@ -47,8 +47,8 @@ else:
         }
     }
 
-# Local settings
+# Temporal settings
 try:
-    from .local import *
+    from .temp import *
 except ImportError:
     pass
