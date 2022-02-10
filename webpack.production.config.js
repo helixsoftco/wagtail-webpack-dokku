@@ -12,5 +12,6 @@ config.plugins.push(
 );
 
 config.output.path = path.resolve('./project_name/static/dist/');
+config.output.publicPath = '/static/dist/';
 
 module.exports = config;
