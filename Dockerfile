@@ -18,7 +18,7 @@ RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-r
 
 # Add group:user that will be used in the container.
 RUN groupadd --gid 2000 wagtail
-RUN useradd --uid 2000 --gid wagtail wagtail
+RUN useradd --uid 2000 --gid wagtail --create-home wagtail
 
 # Use /src folder as a directory where the source code is stored.
 WORKDIR /src
