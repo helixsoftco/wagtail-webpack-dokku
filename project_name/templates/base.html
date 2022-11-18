@@ -1,22 +1,26 @@
 {% load render_bundle from webpack_loader %}
-{% load static wagtailuserbar %}
+{% load static wagtailcore_tags wagtailuserbar %}
 
 <!DOCTYPE html>
-<html class="no-js" lang="en">
+<html lang="en">
     <head>
         <meta charset="utf-8" />
         <title>
             {% block title %}
-                {% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }}{% endif %}
+            {% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}
             {% endblock %}
             {% block title_suffix %}
-                {% with self.get_site.site_name as site_name %}
-                    {% if site_name %}- {{ site_name }}{% endif %}
-                {% endwith %}
+            {% wagtail_site as current_site %}
+            {% if current_site and current_site.site_name %}- {{ current_site.site_name }}{% endif %}
             {% endblock %}
         </title>
         <meta name="description" content="" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        {# Force all links in the live preview panel to be opened in a new tab #}
+        {% if request.in_preview_panel %}
+        <base target="_blank">
+        {% endif %}
 
         {# Global stylesheets #}
         {% render_bundle 'modules' %}
@@ -24,7 +28,7 @@
         {% render_bundle 'app' 'css' %}
 
         {% block extra_css %}
-            {# Override this in templates to add extra stylesheets #}
+        {# Override this in templates to add extra stylesheets #}
         {% endblock %}
     </head>
 
@@ -38,7 +42,7 @@
         {% render_bundle 'app' 'js' %}
 
         {% block extra_js %}
-            {# Override this in templates to add extra javascript #}
+        {# Override this in templates to add extra javascript #}
         {% endblock %}
     </body>
 </html>

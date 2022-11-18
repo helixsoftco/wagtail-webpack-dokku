@@ -57,8 +57,8 @@ STATICFILES_DIRS += [
     os.path.join(BASE_DIR, 'assets')
 ]
 
-# Local settings
+# Temporal settings
 try:
-    from .local import *
+    from .temp import *
 except ImportError:
     pass

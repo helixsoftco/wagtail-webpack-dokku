@@ -6,7 +6,7 @@
       "username": "admin",
       "first_name": "Admin",
       "last_name": "",
-      "email": "admin@altix.co",
+      "email": "admin@helixsoft.co",
       "password": "pbkdf2_sha256$36000$kxuO9QEDuPBK$fsjwtc0alWslTVkAG8AhBeBcWDx0UlvrxtF/euS63Ts=",
       "is_staff": true,
       "is_superuser": true,

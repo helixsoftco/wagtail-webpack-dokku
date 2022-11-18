@@ -1,6 +1,8 @@
 # Use an official Python runtime based on Debian 10 "buster" as a parent image.
-# Info: as of March 2021 python:3.8.1-slim-buster doesn't work because it skips istalling nodejs and npm from nodesource (See: https://github.com/nodejs/help/issues/554)
-FROM python:3.8.1
+FROM python:3.8.1-slim-buster
+
+# Set environment variables.
+# 1. Force Python stdout and stderr streams to be unbuffered.
 ENV PYTHONUNBUFFERED=1
 
 # Install system packages required by Wagtail and Django.
@@ -15,19 +17,30 @@ RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-r
  && rm -rf /var/lib/apt/lists/*
 
 # Nodejs plus npm is required for webpack (to generate bundles)
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
-RUN apt-get update && apt-get install nodejs -y
+RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
+RUN apt-get update && apt-get install -y nodejs
 
-# Setup workdir
-RUN mkdir /src
+# Add group:user that will be used in the container.
+RUN groupadd --gid 2000 wagtail
+RUN useradd --uid 2000 --gid wagtail --create-home wagtail
+
+# Use /src folder as a directory where the source code is stored.
 WORKDIR /src
 
-# JS dependencies
-COPY package.json /src/
-RUN npm install
+# Set this directory to be owned by the "wagtail" user.
+RUN chown wagtail:wagtail /src
 
 # Python dependencies
 COPY requirements.txt /src/
 RUN pip install -r /src/requirements.txt
 
-COPY . /src
+# JS dependencies
+COPY package.json /src/
+COPY package-lock.json /src/
+RUN npm install
+
+# Copy the source code of the project into the container.
+COPY --chown=wagtail:wagtail . /src
+
+# Use user "wagtail" to run the build commands and the server itself.
+USER wagtail
