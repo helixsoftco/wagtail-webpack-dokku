@@ -1,41 +1,42 @@
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const CompressionPlugin = require('compression-webpack-plugin')
+const { VueLoaderPlugin } = require('vue-loader')
+const path = require('path')
+const webpack = require('webpack')
 
 module.exports = {
   context: __dirname,
-  devtool: "source-map",
+  devtool: 'source-map',
 
   entry: {
     app: './assets/js/app',
-    vendor: './assets/js/vendor'
+    vendor: './assets/js/vendor',
   },
 
   output: {
     filename: '[name].[contenthash].js',
-    chunkFilename: '[name].[contenthash].js'
+    chunkFilename: '[name].[contenthash].js',
+    clean: true,
   },
 
-  optimization: {
-    // Extract common imports between dependencies and app bundles into a modules.js file
-    splitChunks: {
-      chunks: 'all',
-      name: 'modules',
-    },
-  },
-  
   resolve: {
-    extensions: ['.js', '.vue', '.scss'],
+    extensions: ['.js', '.ts', '.vue', '.scss'],
     alias: {
       '@': path.resolve('assets'),
-    }
+    },
   },
 
   plugins: [
+    new webpack.DefinePlugin({
+      // Drop Options API from bundle
+      __VUE_OPTIONS_API__: false,
+      __VUE_PROD_DEVTOOLS__: false,
+    }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css',
     }),
-    new CleanWebpackPlugin(),
+    new CompressionPlugin(),
+    new VueLoaderPlugin(),
   ],
 
   module: {
@@ -44,8 +45,25 @@ module.exports = {
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,
         use: {
-          loader: "babel-loader"
-        }
+          loader: 'babel-loader',
+        },
+      },
+      {
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: 'javascript/auto',
+      },
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+      },
+      {
+        test: /\.ts$/,
+        loader: 'ts-loader',
+        options: {
+          appendTsSuffixTo: [/\.vue$/],
+        },
+        exclude: /node_modules/,
       },
       {
         test: /\.s[ac]ss$/i,
@@ -58,49 +76,46 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              sourceMap: true
-            }
+              sourceMap: true,
+            },
           },
           // Make modern CSS work with old browsers
           {
             loader: 'postcss-loader',
             options: {
-              sourceMap: true
-            }
+              sourceMap: true,
+            },
           },
           // Compiles Sass to CSS
           {
             loader: 'sass-loader',
             options: {
-              sourceMap: true
-            }
-          }
+              sourceMap: true,
+            },
+          },
         ],
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-        loader: 'url-loader',
-        options: {
-          limit: 10000,
-          name: 'img/[name].[hash:7].[ext]'
-        }
+        type: 'asset',
+        generator: {
+          filename: 'img/[hash][ext][query]',
+        },
       },
       {
         test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
-        loader: 'url-loader',
-        options: {
-          limit: 10000,
-          name: 'media/[name].[hash:7].[ext]'
-        }
+        type: 'asset',
+        generator: {
+          filename: 'media/[hash][ext][query]',
+        },
       },
       {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-        loader: 'url-loader',
-        options: {
-          limit: 10000,
-          name: 'fonts/[name].[hash:7].[ext]'
-        }
-      }
+        type: 'asset',
+        generator: {
+          filename: 'fonts/[hash][ext][query]',
+        },
+      },
     ],
   },
 }
