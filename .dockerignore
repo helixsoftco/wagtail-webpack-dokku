@@ -43,3 +43,4 @@ wheels/
 .env/
 src/media/
 src/static/
+local/

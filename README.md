@@ -1,6 +1,6 @@
 # project_name
 
-Wagtail 2.12 + Django 3.1 + Webpack + Postgres 11 + Dokku config (Production Ready)
+Wagtail 4.1 + Django 4.1 + Webpack + Postgres 11 + Dokku config (Production Ready)
 
 ## Documentation ##
 
@@ -44,7 +44,7 @@ Wagtail 2.12 + Django 3.1 + Webpack + Postgres 11 + Dokku config (Production Rea
 └── requirements.txt (Python dependencies to be installed)
 ```
 
-### How to install the template ###
+### How to install the template
 
 Clone the repository, and update your origin url: 
 ```
@@ -73,7 +73,7 @@ git init
 git remote add origin <repository-url>
 ```
 
-### How to run the project ###
+### How to run the project
 
 The project use docker, so just run:
 
@@ -108,17 +108,18 @@ Username: admin
 Password: admin
 ```
 
-## Production Deployment: ##
+## Production Deployment:
 
 The project is dokku ready, these are the steps to deploy it in your dokku server:
 
-#### Server Side: ####
+#### Server Side:
 
 > These docs do not cover dokku setup, you should already have configured the initial dokku config including ssh keys
 
 Create the app and configure postgres:
 ```
 dokku apps:create project_name
+dokku git:set project_name deploy-branch main
 dokku postgres:create project_name
 dokku postgres:link project_name project_name
 ```
@@ -135,7 +136,7 @@ Current required environment variables are:
 
 * ENVIRONMENT
 * DJANGO_SECRET_KEY
-* EMAIL_PASSWORD
+* DATABASE_URL e.g: postgres://{user}:{password}@{hostname}:{port}/{database-name}
 
 Use the same command to configure secret credentials for the app
 
@@ -147,13 +148,20 @@ Configure the dokku remote:
 git remote add production dokku@<my-dokku-server.com>:project_name
 ```
 
+Now config your SSH key so that it gets loaded when pushing the code, open `~/.ssh/config` and add the following:
+```
+Host my-dokku-server.com
+    Hostname my-dokku-server.com
+    IdentityFile ~/.ssh/my-ssh-key-with-access
+```
+
 Push your changes and just wait for the magic to happens :D:
 
 ```
 git push production master
 ```
 
-> *IMPORTANT:* After deploying configure the correct site domain on: https://myhost.com/admin/sites/
+> *IMPORTANT:* After deploying configure the correct site domain on: https://<my-domain>/admin/sites/
 > Otherwise some URLs would be blocked by the ALLOWED_HOSTS due to Wagtail requesting localhost
 
 Optional: To add SSL to the app check:
@@ -171,8 +179,23 @@ Optional: Additional nginx configuration (like client_max_body_size) should be p
 In case you want to serve the `static` and `media` files directly from the server, instead of AWS or a different storage,
 the following steps are required:
 
-In the server configure the dokku persistent storage:
+In the server create the directories that will host the `static` and `media` files:
+```
+sudo mkdir -p /var/lib/dokku/data/storage/project_name/media
+sudo mkdir -p /var/lib/dokku/data/storage/project_name/static
+```
 
+**IMPORTANT**: The directories owner should be the same user as in the docker containers, currently `wagtail`,
+the GUI and UID should be `2000` (You can confirm these values in the Dockerfile), otherwise the containers won't have enough permissions to read/write to the directories,
+therefore the following commands to create the user and assign it the directories are needed:
+```
+sudo groupadd --gid 2000 wagtail
+sudo useradd --uid 2000 --gid wagtail wagtail
+sudo chown -R wagtail:wagtail /var/lib/dokku/data/storage/project_name/media
+sudo chown -R wagtail:wagtail /var/lib/dokku/data/storage/project_name/static
+```
+
+Now, in the server configure the dokku persistent storage:
 ```
 dokku storage:mount project_name /var/lib/dokku/data/storage/project_name/media:/src/media
 dokku storage:mount project_name /var/lib/dokku/data/storage/project_name/static:/src/static
@@ -198,6 +221,42 @@ To the following file (You may need to create it):
 Finally, restart Nginx:
 ```
 service nginx restart
+```
+
+### Extra steps
+
+#### Configuring the domain
+
+You might get a `400` or `403` response from the server if you haven't configured the `ALLOWED_HOSTS` or the `CSRF_TRUSTED_ORIGINS` correctly, therefore open
+`settings/production.py` and update the `ALLOWED_HOSTS` and `CSRF_TRUSTED_ORIGINS` accordingly.
+
+#### Installing SSL
+Dokku makes it easy to configure SSL on the apps by using its letsencrypt plugin, to do so install the plugin:
+```
+sudo dokku plugin:install https://github.com/dokku/dokku-letsencrypt.git
+```
+
+Config the letsencrypt email if you haven't already:
+```
+dokku config:set --global DOKKU_LETSENCRYPT_EMAIL=your@email.tld
+```
+
+Enable it for the app:
+```
+dokku letsencrypt:enable project_name
+```
+
+And finally configure the auto-renewal:
+```
+dokku letsencrypt:cron-job --add
+```
+
+#### Create a Superuser
+
+So can do so with these commands when the application is running:
+```
+dokku enter project_name
+python manage.py createsuperuser
 ```
 
 ### Configuring CORS
