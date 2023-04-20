@@ -1,5 +1,5 @@
 # Use an official Python runtime based on Debian 10 "buster" as a parent image.
-FROM python:3.8.1-slim-buster
+FROM python:3.9-slim-bullseye
 
 # Set environment variables.
 # 1. Force Python stdout and stderr streams to be unbuffered.
@@ -9,7 +9,6 @@ ENV PYTHONUNBUFFERED=1
 RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-recommends \
     build-essential \
     libpq-dev \
-    libmariadbclient-dev \
     libjpeg62-turbo-dev \
     zlib1g-dev \
     libwebp-dev \
