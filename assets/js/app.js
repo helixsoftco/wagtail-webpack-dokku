@@ -1,4 +1,3 @@
-import "../scss/app.scss"
+import '../scss/app.scss'
 
-
-console.log('Webpack working');
+console.log('Webpack working')
