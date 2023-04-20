@@ -32,7 +32,11 @@
     <body class="{% block body_class %}{% endblock %}">
         {% wagtailuserbar %}
 
-        {% block content %}{% endblock %}
+        {# Use 'body' block to define custom layouts #}
+        {% block body %}
+          {# Use 'content' block for pages #}
+          {% block content %}{% endblock %}
+        {% endblock %}
 
         {# Global javascript #}
         <script type="text/javascript" src="{% static 'js/project_name.js' %}"></script>
