@@ -22,7 +22,7 @@ DEV_MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware'
 ]
 
-MIDDLEWARE = MIDDLEWARE + DEV_MIDDLEWARE  # CORS middleware should be at the top of the list
+MIDDLEWARE = DEV_MIDDLEWARE + MIDDLEWARE  # CORS middleware should be at the top of the list
 
 CORS_ORIGIN_ALLOW_ALL = True
 """
