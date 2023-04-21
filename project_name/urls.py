@@ -18,6 +18,7 @@ apiurls = ([
 urlpatterns = [
     path('', include('main.urls')),
     path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+    path('accounts/', include('django.contrib.auth.urls')),
     path('api/', include(apiurls, namespace='api')),
     path('django-admin/', admin.site.urls),
     path('admin/', include(wagtailadmin_urls)),

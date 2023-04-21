@@ -108,6 +108,40 @@ Username: admin
 Password: admin
 ```
 
+### Authentication with OAuth2
+
+The REST API is configured along with `django-oauth2-toolkit`, and the `dev` fixture creates an OAuth2 application with the authorization-code flow.
+You can start the authorization-code flow by going to:
+
+http://localhost:8000/o/authorize
+
+With the following parameters:
+
+* response_type: code
+* client_id: MDzf7CCFbK3I12vmBR0QxjK14gNJYnD6rcjH7s3O
+* redirect_uri: http://localhost:8000/noexist/callback
+* code_challenge: XRi41b-5yHtTojvCpXFpsLUnmGFz6xR15c3vpPANAvM
+* code_challenge_method: S256
+
+The Full URL is:
+
+http://localhost:8000/o/authorize/?response_type=code&code_challenge=XRi41b-5yHtTojvCpXFpsLUnmGFz6xR15c3vpPANAvM&code_challenge_method=S256&client_id=MDzf7CCFbK3I12vmBR0QxjK14gNJYnD6rcjH7s3O&redirect_uri=http://localhost:8000/noexist/callback
+
+> **IMPORTANT:** You can see the parameters contain the code_challenge for [PKCE (Proof Key for Code Exchange)](https://oauth.net/2/pkce/),
+here you can see an example about how to create the code_challenge with Javascript:
+https://auth0.com/docs/get-started/authentication-and-authorization-flow/call-your-api-using-the-authorization-code-flow-with-pkce
+
+> In case you want to disable PKCE, add the following to the OAuth settings:
+```python
+OAUTH2_PROVIDER = {
+    'PKCE_REQUIRED': False,
+}
+```
+
+For more information see:
+
+- https://django-oauth-toolkit.readthedocs.io/en/latest/getting_started.html
+
 ## Production Deployment:
 
 The project is dokku ready, these are the steps to deploy it in your dokku server:

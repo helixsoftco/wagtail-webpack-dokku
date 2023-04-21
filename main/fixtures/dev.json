@@ -17,16 +17,17 @@
     "model": "oauth2_provider.application",
     "pk": 1000,
     "fields": {
-      "client_id": "03Z1U46wujpGV6TeBN0a4wWsNuRLdOy5b9Oc3kHx",
+      "client_id": "MDzf7CCFbK3I12vmBR0QxjK14gNJYnD6rcjH7s3O",
       "user": 1,
-      "redirect_uris": "",
+      "redirect_uris": "http://localhost:8000/noexist/callback",
       "client_type": "public",
-      "authorization_grant_type": "password",
-      "client_secret": "ajgLsxKgT7sM5ETwa8CXKNAcxzO33uPHk5H5s4ke9SgP8GiMpmOVcGrhUCQywjWH9LwDpAILhAHZFbIceofjIPnBV4dngiEAtZfzchZQQFnUHAn5jPvcnzAvYVVEZTTR",
+      "authorization_grant_type": "authorization-code",
+      "client_secret": "pbkdf2_sha256$390000$rZQPRdntck8zDTGQvUXJ1T$vxjznZWcaf6gEQ+rFeouHbZPJdwh79AesLrWwlJs4PI=",
       "name": "project_name",
       "skip_authorization": false,
-      "created": "2019-05-21T17:21:20.731Z",
-      "updated": "2019-05-21T17:21:20.731Z"
+      "created": "2023-04-21T00:24:53.490Z",
+      "updated": "2023-04-21T00:24:53.490Z",
+      "algorithm": ""
     }
   }
 ]
