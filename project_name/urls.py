@@ -1,6 +1,8 @@
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 from django.urls import path, include
 from django.conf import settings
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail import urls as wagtail_urls
@@ -20,6 +22,8 @@ urlpatterns = [
     path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('api/', include(apiurls, namespace='api')),
+    path('documentation/spec/', login_required(SpectacularAPIView.as_view()), name='api-spec'),
+    path('documentation/api/', login_required(SpectacularSwaggerView.as_view(url_name='api-spec')), name='swagger-ui'),
     path('django-admin/', admin.site.urls),
     path('admin/', include(wagtailadmin_urls)),
     path('documents/', include(wagtaildocs_urls)),

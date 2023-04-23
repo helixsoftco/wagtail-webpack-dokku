@@ -61,9 +61,10 @@ ADDONS = [
     # 'webpack_loader',
     # To use Rest Framework uncomment next line
     'rest_framework',
+    'oauth2_provider',
+    'drf_spectacular',
     # To use Push Notifications uncomment next line
     # 'push_notifications',
-    'oauth2_provider',
 ]
 
 INSTALLED_APPS = DEPENDENCIES_APPS + ADDONS + PROJECT_APPS
@@ -122,15 +123,40 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# API Settings
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
-    )
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'project_name API',
+    'DESCRIPTION': 'project_name description',
+    'VERSION': '1.0.0',
+    # Include the schema/spec endpoint in the spec
+    'SERVE_INCLUDE_SCHEMA': True,
+    # Do not consider the prefix "/api" when grouping the endpoints by tags
+    'SCHEMA_PATH_PREFIX': '/api',
+    # Use Camel case the operationIds
+    'CAMELIZE_NAMES': True,
+    # Create different component schemas for request and responses to show its differences in required fields
+    'COMPONENT_SPLIT_REQUEST': True,
+    'SWAGGER_UI_SETTINGS': {
+        "deepLinking": True,
+        # "persistAuthorization": False,
+        "displayOperationId": True,
+        "operationsSorter": 'alpha',
+        "tagsSorter": 'alpha',
+        "filter": True,
+    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
