@@ -150,7 +150,8 @@ SPECTACULAR_SETTINGS = {
     'COMPONENT_SPLIT_REQUEST': True,
     'SWAGGER_UI_SETTINGS': {
         "deepLinking": True,
-        # "persistAuthorization": False,
+        # Uncomment next line to persist authorization when reloading swagger ui
+        # "persistAuthorization": True,
         "displayOperationId": True,
         "operationsSorter": 'alpha',
         "tagsSorter": 'alpha',
